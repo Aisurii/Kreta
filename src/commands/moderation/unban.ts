@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction, PermissionsBitField } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionsBitField } from 'discord.js';
 import { Command, PermissionLevel } from '../../types';
 import { createSuccessEmbed, createErrorEmbed } from '../../utils/embed';
 import { createModLog } from '../../utils/moderation';
@@ -26,7 +26,7 @@ const command: Command = {
   botPermissions: [PermissionsBitField.Flags.BanMembers],
   guildOnly: true,
 
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild) {
       return;
     }

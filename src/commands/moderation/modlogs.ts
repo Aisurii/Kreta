@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { Command, PermissionLevel } from '../../types';
 import { createEmbed, createErrorEmbed } from '../../utils/embed';
 import { prisma } from '../../database/client';
@@ -39,7 +39,7 @@ const command: Command = {
   permissionLevel: PermissionLevel.Moderator,
   guildOnly: true,
 
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild) {
       return;
     }

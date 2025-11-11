@@ -1,18 +1,40 @@
+console.log('=== BOT STARTING ===');
 import 'dotenv/config';
+console.log('✓ Loaded dotenv');
+
+console.log('Loading BotClient...');
 import { BotClient } from './core/client';
+console.log('✓ Loaded BotClient');
+
+console.log('Loading command handler...');
 import { loadCommands } from './core/commandHandler';
+console.log('✓ Loaded command handler');
+
+console.log('Loading event handler...');
 import { loadEvents } from './core/eventHandler';
+console.log('✓ Loaded event handler');
+
+console.log('Loading database client...');
 import { prisma, disconnectDatabase } from './database/client';
+console.log('✓ Loaded database client');
+
+console.log('Loading logger...');
 import { logger } from './utils/logger';
+console.log('✓ Loaded logger');
+
+console.log('✓ All imports loaded successfully');
 
 // Validate required environment variables
+console.log('Checking environment variables...');
 const requiredEnvVars = ['BOT_TOKEN', 'CLIENT_ID', 'DATABASE_URL'];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
+    console.error(`Missing required environment variable: ${envVar}`);
     logger.error(`Missing required environment variable: ${envVar}`);
     process.exit(1);
   }
 }
+console.log('✓ All environment variables present');
 
 // Create bot client instance
 const client = new BotClient();

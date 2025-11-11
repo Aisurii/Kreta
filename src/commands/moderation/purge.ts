@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction, PermissionsBitField, TextChannel } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionsBitField, TextChannel } from 'discord.js';
 import { Command, PermissionLevel } from '../../types';
 import { createSuccessEmbed, createErrorEmbed } from '../../utils/embed';
 import { createModLog } from '../../utils/moderation';
@@ -35,7 +35,7 @@ const command: Command = {
   guildOnly: true,
   cooldown: 5, // 5 second cooldown to prevent abuse
 
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild || !interaction.channel) {
       return;
     }

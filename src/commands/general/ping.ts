@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { Command, PermissionLevel } from '../../types';
 import { createEmbed } from '../../utils/embed';
 
@@ -9,7 +9,7 @@ const command: Command = {
 
   permissionLevel: PermissionLevel.User,
 
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: ChatInputCommandInteraction) {
     const sent = await interaction.reply({
       embeds: [createEmbed({ description: '🏓 Pinging...' })],
       fetchReply: true,

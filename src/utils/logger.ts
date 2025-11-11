@@ -1,5 +1,4 @@
 import winston from 'winston';
-import path from 'path';
 
 // Define log levels
 const levels = {
@@ -31,14 +30,6 @@ const consoleFormat = winston.format.combine(
   })
 );
 
-// Format for file output (no colors)
-const fileFormat = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  winston.format.printf((info) => {
-    return `[${info.timestamp}] ${info.level.toUpperCase()}: ${info.message}`;
-  })
-);
-
 // Create logger instance
 export const logger = winston.createLogger({
   levels,
@@ -47,30 +38,6 @@ export const logger = winston.createLogger({
     // Console transport (colored)
     new winston.transports.Console({
       format: consoleFormat,
-    }),
-    // Error log file
-    new winston.transports.File({
-      filename: path.join('logs', 'error.log'),
-      level: 'error',
-      format: fileFormat,
-    }),
-    // Combined log file
-    new winston.transports.File({
-      filename: path.join('logs', 'combined.log'),
-      format: fileFormat,
-    }),
-  ],
-  // Handle exceptions and rejections
-  exceptionHandlers: [
-    new winston.transports.File({
-      filename: path.join('logs', 'exceptions.log'),
-      format: fileFormat,
-    }),
-  ],
-  rejectionHandlers: [
-    new winston.transports.File({
-      filename: path.join('logs', 'rejections.log'),
-      format: fileFormat,
     }),
   ],
 });

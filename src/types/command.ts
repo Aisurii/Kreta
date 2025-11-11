@@ -1,8 +1,9 @@
 import {
   SlashCommandBuilder,
-  CommandInteraction,
+  ChatInputCommandInteraction,
   PermissionResolvable,
   AutocompleteInteraction,
+  SlashCommandOptionsOnlyBuilder,
 } from 'discord.js';
 
 // Permission level enum
@@ -15,7 +16,7 @@ export enum PermissionLevel {
 // Command interface that all commands must implement
 export interface Command {
   // Command data for slash command registration
-  data: SlashCommandBuilder;
+  data: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'> | SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
 
   // Permission level required to use this command
   permissionLevel: PermissionLevel;
@@ -33,7 +34,7 @@ export interface Command {
   cooldown?: number;
 
   // Main execution function
-  execute: (interaction: CommandInteraction) => Promise<void>;
+  execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 
   // Optional autocomplete handler
   autocomplete?: (interaction: AutocompleteInteraction) => Promise<void>;

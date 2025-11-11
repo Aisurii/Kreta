@@ -9,21 +9,7 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
-export const prisma = global.prisma || new PrismaClient({
-  log: [
-    { level: 'warn', emit: 'event' },
-    { level: 'error', emit: 'event' },
-  ],
-});
-
-// Log Prisma warnings and errors
-prisma.$on('warn', (e) => {
-  logger.warn(`Prisma Warning: ${e.message}`);
-});
-
-prisma.$on('error', (e) => {
-  logger.error(`Prisma Error: ${e.message}`);
-});
+export const prisma = global.prisma || new PrismaClient();
 
 if (process.env.NODE_ENV !== 'production') {
   global.prisma = prisma;

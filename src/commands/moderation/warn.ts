@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction, GuildMember } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import { Command, PermissionLevel } from '../../types';
 import { canModerate } from '../../utils/permissions';
 import { createSuccessEmbed, createErrorEmbed } from '../../utils/embed';
@@ -23,7 +23,7 @@ const command: Command = {
   permissionLevel: PermissionLevel.Moderator,
   guildOnly: true,
 
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild || !interaction.member) {
       return;
     }

@@ -33,13 +33,13 @@ export async function loadEvents(client: BotClient): Promise<void> {
       // Register event listener
       if (event.once) {
         client.once(event.name, (...args) => {
-          event.execute(...args).catch((error) => {
+          Promise.resolve(event.execute(...args)).catch((error: unknown) => {
             logger.error(`Error executing once event ${event.name}: ${error}`);
           });
         });
       } else {
         client.on(event.name, (...args) => {
-          event.execute(...args).catch((error) => {
+          Promise.resolve(event.execute(...args)).catch((error: unknown) => {
             logger.error(`Error executing event ${event.name}: ${error}`);
           });
         });
