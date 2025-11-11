@@ -1,0 +1,86 @@
+// Prisma Schema for Kreta Discord Bot
+// Database: PostgreSQL (can be changed to SQLite for development)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Guild (Server) configuration and settings
+model Guild {
+  id                String   @id // Discord guild ID
+  modLogChannelId   String?  // Channel for moderation logs
+  modRoleId         String?  // Role that has moderator permissions
+  adminRoleId       String?  // Role that has admin permissions (fallback to Discord admin)
+  toxicityThreshold Int      @default(70) // AI moderation threshold (0-100, higher = more lenient)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("guilds")
+}
+
+// User data (global across all guilds)
+model User {
+  id        String   @id // Discord user ID
+  username  String   // Discord username (for reference)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Moderation action logs
+model ModLog {
+  id          Int      @id @default(autoincrement())
+  guildId     String   // Guild where action occurred
+  caseNumber  Int      // Sequential case number per guild
+  type        String   // Type: warn, kick, ban, mute, unmute, unban
+  targetId    String   // User who received the action
+  moderatorId String   // User who performed the action
+  reason      String   // Reason for the action
+  evidence    String?  // Optional evidence (message links, attachments, etc.)
+  timestamp   DateTime @default(now())
+  duration    Int?     // Duration in seconds (for temporary actions like mutes)
+  status      String   @default("active") // Status: active, expired, revoked
+
+  @@unique([guildId, caseNumber])
+  @@index([guildId, targetId])
+  @@index([guildId, status])
+  @@map("mod_logs")
+}
+
+// User warnings (subset of ModLog but easier to query)
+model Warning {
+  id          Int      @id @default(autoincrement())
+  guildId     String   // Guild where warning was issued
+  userId      String   // User who was warned
+  moderatorId String   // Moderator who issued warning
+  reason      String   // Reason for warning
+  timestamp   DateTime @default(now())
+
+  @@index([guildId, userId])
+  @@map("warnings")
+}
+
+// Flagged messages from AI moderation
+model FlaggedMessage {
+  id          Int      @id @default(autoincrement())
+  messageId   String   @unique // Discord message ID
+  guildId     String   // Guild where message was sent
+  userId      String   // User who sent the message
+  channelId   String   // Channel where message was sent
+  content     String   // Message content
+  reason      String   // Why it was flagged (toxicity, spam, etc.)
+  score       Float    // AI confidence score (0-100)
+  timestamp   DateTime @default(now())
+  reviewed    Boolean  @default(false) // Has a moderator reviewed this?
+  actionTaken String?  // Action taken: null, deleted, warned, muted, banned, etc.
+
+  @@index([guildId, reviewed])
+  @@index([guildId, userId])
+  @@map("flagged_messages")
+}

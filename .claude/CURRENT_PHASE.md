@@ -75,7 +75,6 @@ Starting project initialization
 ### 4. Command System
 - [ ] Create base command interface/class
 - [ ] Setup slash command registration
-- [ ] Setup prefix command parser
 - [ ] Create command loader
 - [ ] Test with ping command
 
@@ -209,7 +208,6 @@ G:/Kreta/
 ```prisma
 model Guild {
   id                String   @id
-  prefix            String   @default("!")
   modLogChannelId   String?
   modRoleId         String?
   adminRoleId       String?
